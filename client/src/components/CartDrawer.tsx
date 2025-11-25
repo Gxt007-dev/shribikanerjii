@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Minus, Plus, X } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { motion, AnimatePresence } from "framer-motion";
 
 export interface CartItem {
   id: string;
@@ -47,12 +48,26 @@ export default function CartDrawer({
         <ScrollArea className="flex-1 -mx-6 px-6">
           <div className="space-y-4 py-4">
             {items.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8" data-testid="text-empty-cart">
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center text-muted-foreground py-8" 
+                data-testid="text-empty-cart"
+              >
                 Your cart is empty
-              </p>
+              </motion.p>
             ) : (
-              items.map((item) => (
-                <div key={item.id} className="flex gap-4" data-testid={`cart-item-${item.id}`}>
+              <AnimatePresence>
+                {items.map((item) => (
+                  <motion.div 
+                    key={item.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex gap-4" 
+                    data-testid={`cart-item-${item.id}`}
+                  >
                   <div className="h-20 w-20 rounded-md overflow-hidden bg-muted flex-shrink-0">
                     <img 
                       src={item.image} 
@@ -103,8 +118,9 @@ export default function CartDrawer({
                       </Button>
                     </div>
                   </div>
-                </div>
-              ))
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             )}
           </div>
         </ScrollArea>

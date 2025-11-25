@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import CartDrawer, { CartItem } from "@/components/CartDrawer";
 import AdSense from "@/components/AdSense";
 import { useToast } from "@/hooks/use-toast";
+import { motion, useInView } from "framer-motion";
 
 import gulabJamunImage from "@assets/generated_images/gulab_jamun_product_photo.png";
 import kajuKatliImage from "@assets/generated_images/kaju_katli_product_photo.png";
@@ -41,6 +42,11 @@ export default function Home() {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { toast } = useToast();
+  
+  const categoriesRef = useRef(null);
+  const productsRef = useRef(null);
+  const categoriesInView = useInView(categoriesRef, { once: true, amount: 0.2 });
+  const productsInView = useInView(productsRef, { once: true, amount: 0.1 });
 
   const handleAddToCart = (productId: string) => {
     const product = MOCK_PRODUCTS.find(p => p.id === productId);
@@ -99,18 +105,30 @@ export default function Home() {
       <main className="flex-1">
         <Hero onShopNowClick={scrollToProducts} />
 
-        <section className="container mx-auto px-4 py-16">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12" data-testid="text-categories-title">
+        <section ref={categoriesRef} className="container mx-auto px-4 py-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 30 }}
+            animate={categoriesInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="font-serif text-3xl md:text-4xl font-bold text-center mb-12" 
+            data-testid="text-categories-title"
+          >
             Shop by Category
-          </h2>
+          </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {CATEGORIES.map((category) => (
-              <CategoryCard
+            {CATEGORIES.map((category, index) => (
+              <motion.div
                 key={category.name}
-                name={category.name}
-                image={category.image}
-                onClick={() => console.log('Category clicked:', category.name)}
-              />
+                initial={{ opacity: 0, y: 50 }}
+                animate={categoriesInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <CategoryCard
+                  name={category.name}
+                  image={category.image}
+                  onClick={() => console.log('Category clicked:', category.name)}
+                />
+              </motion.div>
             ))}
           </div>
         </section>
@@ -119,18 +137,30 @@ export default function Home() {
           <AdSense format="horizontal" slot="homepage-banner" />
         </section>
 
-        <section id="products" className="container mx-auto px-4 py-16">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12" data-testid="text-products-title">
+        <section ref={productsRef} id="products" className="container mx-auto px-4 py-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 30 }}
+            animate={productsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="font-serif text-3xl md:text-4xl font-bold text-center mb-12" 
+            data-testid="text-products-title"
+          >
             Featured Products
-          </h2>
+          </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {MOCK_PRODUCTS.map((product) => (
-              <ProductCard
+            {MOCK_PRODUCTS.map((product, index) => (
+              <motion.div
                 key={product.id}
-                {...product}
-                onAddToCart={handleAddToCart}
-                onClick={(id) => console.log('Product clicked:', id)}
-              />
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={productsInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+              >
+                <ProductCard
+                  {...product}
+                  onAddToCart={handleAddToCart}
+                  onClick={(id) => console.log('Product clicked:', id)}
+                />
+              </motion.div>
             ))}
           </div>
         </section>
