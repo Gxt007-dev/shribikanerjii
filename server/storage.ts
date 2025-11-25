@@ -1,7 +1,14 @@
-import { type Product, type InsertProduct, type Order, type InsertOrder, type ContactSubmission, type InsertContactSubmission } from "@shared/schema";
-import { randomUUID } from "crypto";
+import { db } from "./db";
+import { users, products, orders, contactSubmissions } from "@shared/schema";
+import { eq, sql } from "drizzle-orm";
+import type { InsertProduct, InsertOrder, InsertContactSubmission, Product, Order, ContactSubmission } from "@shared/schema";
 
 export interface IStorage {
+  // Users
+  getOrCreateUser(email: string): Promise<any>;
+  updateUserStripeInfo(userId: string, stripeInfo: any): Promise<any>;
+  
+  // Products
   getProduct(id: string): Promise<Product | undefined>;
   getAllProducts(): Promise<Product[]>;
   getProductsByCategory(category: string): Promise<Product[]>;
@@ -9,92 +16,92 @@ export interface IStorage {
   updateProduct(id: string, product: Partial<InsertProduct>): Promise<Product | undefined>;
   deleteProduct(id: string): Promise<boolean>;
   
+  // Orders
   getOrder(id: string): Promise<Order | undefined>;
   getAllOrders(): Promise<Order[]>;
   createOrder(order: InsertOrder): Promise<Order>;
   updateOrderStatus(id: string, status: string): Promise<Order | undefined>;
+  updateOrderStripePayment(id: string, paymentIntentId: string): Promise<Order | undefined>;
   
+  // Contact
   getAllContactSubmissions(): Promise<ContactSubmission[]>;
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
 }
 
-export class MemStorage implements IStorage {
-  private products: Map<string, Product>;
-  private orders: Map<string, Order>;
-  private contactSubmissions: Map<string, ContactSubmission>;
+export class DbStorage implements IStorage {
+  async getOrCreateUser(email: string) {
+    let [user] = await db.select().from(users).where(eq(users.email, email));
+    if (!user) {
+      [user] = await db.insert(users).values({ email }).returning();
+    }
+    return user;
+  }
 
-  constructor() {
-    this.products = new Map();
-    this.orders = new Map();
-    this.contactSubmissions = new Map();
+  async updateUserStripeInfo(userId: string, stripeInfo: any) {
+    const [user] = await db.update(users).set(stripeInfo).where(eq(users.id, userId)).returning();
+    return user;
   }
 
   async getProduct(id: string): Promise<Product | undefined> {
-    return this.products.get(id);
-  }
-
-  async getAllProducts(): Promise<Product[]> {
-    return Array.from(this.products.values());
-  }
-
-  async getProductsByCategory(category: string): Promise<Product[]> {
-    return Array.from(this.products.values()).filter(
-      (product) => product.category === category,
-    );
-  }
-
-  async createProduct(insertProduct: InsertProduct): Promise<Product> {
-    const id = randomUUID();
-    const product: Product = { ...insertProduct, id };
-    this.products.set(id, product);
+    const [product] = await db.select().from(products).where(eq(products.id, id));
     return product;
   }
 
+  async getAllProducts(): Promise<Product[]> {
+    return await db.select().from(products);
+  }
+
+  async getProductsByCategory(category: string): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.category, category));
+  }
+
+  async createProduct(product: InsertProduct): Promise<Product> {
+    const [created] = await db.insert(products).values(product).returning();
+    return created;
+  }
+
   async updateProduct(id: string, updates: Partial<InsertProduct>): Promise<Product | undefined> {
-    const product = this.products.get(id);
-    if (!product) return undefined;
-    const updated = { ...product, ...updates };
-    this.products.set(id, updated);
-    return updated;
+    const [product] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
+    return product;
   }
 
   async deleteProduct(id: string): Promise<boolean> {
-    return this.products.delete(id);
+    const result = await db.delete(products).where(eq(products.id, id));
+    return true;
   }
 
   async getOrder(id: string): Promise<Order | undefined> {
-    return this.orders.get(id);
-  }
-
-  async getAllOrders(): Promise<Order[]> {
-    return Array.from(this.orders.values());
-  }
-
-  async createOrder(insertOrder: InsertOrder): Promise<Order> {
-    const id = randomUUID();
-    const order: Order = { ...insertOrder, id, status: "pending" };
-    this.orders.set(id, order);
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
     return order;
   }
 
+  async getAllOrders(): Promise<Order[]> {
+    return await db.select().from(orders);
+  }
+
+  async createOrder(order: InsertOrder): Promise<Order> {
+    const [created] = await db.insert(orders).values({ ...order, status: "pending" }).returning();
+    return created;
+  }
+
   async updateOrderStatus(id: string, status: string): Promise<Order | undefined> {
-    const order = this.orders.get(id);
-    if (!order) return undefined;
-    const updated = { ...order, status };
-    this.orders.set(id, updated);
-    return updated;
+    const [order] = await db.update(orders).set({ status }).where(eq(orders.id, id)).returning();
+    return order;
+  }
+
+  async updateOrderStripePayment(id: string, paymentIntentId: string): Promise<Order | undefined> {
+    const [order] = await db.update(orders).set({ stripePaymentIntentId: paymentIntentId }).where(eq(orders.id, id)).returning();
+    return order;
   }
 
   async getAllContactSubmissions(): Promise<ContactSubmission[]> {
-    return Array.from(this.contactSubmissions.values());
+    return await db.select().from(contactSubmissions);
   }
 
-  async createContactSubmission(insertSubmission: InsertContactSubmission): Promise<ContactSubmission> {
-    const id = randomUUID();
-    const submission: ContactSubmission = { ...insertSubmission, id };
-    this.contactSubmissions.set(id, submission);
-    return submission;
+  async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
+    const [created] = await db.insert(contactSubmissions).values(submission).returning();
+    return created;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DbStorage();
