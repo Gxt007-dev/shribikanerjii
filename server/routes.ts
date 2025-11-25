@@ -2,11 +2,11 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertProductSchema, insertOrderSchema, insertContactSubmissionSchema } from "@shared/schema";
+import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Admin auth check middleware
   const adminAuth = (req: any, res: any, next: any) => {
     const adminKey = req.headers["x-admin-key"];
     if (adminKey === ADMIN_PASSWORD) {
@@ -15,6 +15,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(401).json({ error: "Unauthorized" });
     }
   };
+
+  // Get Stripe publishable key
+  app.get("/api/stripe/publishable-key", async (req, res) => {
+    try {
+      const key = await getStripePublishableKey();
+      res.json({ publishableKey: key });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get Stripe key" });
+    }
+  });
+
+  // Checkout endpoint
+  app.post("/api/checkout", async (req, res) => {
+    try {
+      const { items, email, customerName, customerPhone, shippingAddress } = req.body;
+      
+      if (!items || !email || !customerName) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      
+      // Create or get user
+      const user = await storage.getOrCreateUser(email);
+
+      // Calculate total
+      const total = items.reduce((sum: number, item: any) => sum + (parseFloat(item.price) * item.quantity), 0);
+
+      // Create order first
+      const order = await storage.createOrder({
+        customerName,
+        customerEmail: email,
+        customerPhone: customerPhone || "",
+        shippingAddress: shippingAddress || "",
+        items: JSON.stringify(items),
+        total: total.toString(),
+      });
+
+      // Create payment intent
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(total * 100),
+        currency: "inr",
+        metadata: {
+          orderId: order.id,
+          customerEmail: email,
+        },
+      });
+
+      // Update order with payment intent
+      await storage.updateOrderStripePayment(order.id, paymentIntent.id);
+
+      res.json({
+        clientSecret: paymentIntent.client_secret,
+        orderId: order.id,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 
   // Products endpoints
   app.get("/api/products", async (req, res) => {
