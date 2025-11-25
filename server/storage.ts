@@ -1,37 +1,66 @@
-import { type User, type InsertUser } from "@shared/schema";
+import { type Product, type InsertProduct, type Order, type InsertOrder, type ContactSubmission, type InsertContactSubmission } from "@shared/schema";
 import { randomUUID } from "crypto";
 
-// modify the interface with any CRUD methods
-// you might need
-
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getProduct(id: string): Promise<Product | undefined>;
+  getAllProducts(): Promise<Product[]>;
+  getProductsByCategory(category: string): Promise<Product[]>;
+  createProduct(product: InsertProduct): Promise<Product>;
+  
+  getOrder(id: string): Promise<Order | undefined>;
+  createOrder(order: InsertOrder): Promise<Order>;
+  
+  createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private products: Map<string, Product>;
+  private orders: Map<string, Order>;
+  private contactSubmissions: Map<string, ContactSubmission>;
 
   constructor() {
-    this.users = new Map();
+    this.products = new Map();
+    this.orders = new Map();
+    this.contactSubmissions = new Map();
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getProduct(id: string): Promise<Product | undefined> {
+    return this.products.get(id);
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
+  async getAllProducts(): Promise<Product[]> {
+    return Array.from(this.products.values());
+  }
+
+  async getProductsByCategory(category: string): Promise<Product[]> {
+    return Array.from(this.products.values()).filter(
+      (product) => product.category === category,
     );
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async createProduct(insertProduct: InsertProduct): Promise<Product> {
     const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+    const product: Product = { ...insertProduct, id };
+    this.products.set(id, product);
+    return product;
+  }
+
+  async getOrder(id: string): Promise<Order | undefined> {
+    return this.orders.get(id);
+  }
+
+  async createOrder(insertOrder: InsertOrder): Promise<Order> {
+    const id = randomUUID();
+    const order: Order = { ...insertOrder, id, status: "pending" };
+    this.orders.set(id, order);
+    return order;
+  }
+
+  async createContactSubmission(insertSubmission: InsertContactSubmission): Promise<ContactSubmission> {
+    const id = randomUUID();
+    const submission: ContactSubmission = { ...insertSubmission, id };
+    this.contactSubmissions.set(id, submission);
+    return submission;
   }
 }
 
