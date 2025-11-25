@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -62,24 +63,42 @@ export default function Header({ cartItemCount = 0, onCartClick }: HeaderProps) 
               )}
             </div>
 
-            <Button
-              size="icon"
-              variant="ghost"
-              className="relative"
-              onClick={onCartClick}
-              data-testid="button-cart"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {cartItemCount > 0 && (
-                <Badge 
-                  variant="destructive" 
-                  className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
-                  data-testid="badge-cart-count"
-                >
-                  {cartItemCount}
-                </Badge>
-              )}
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="relative"
+                onClick={onCartClick}
+                data-testid="button-cart"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                <AnimatePresence>
+                  {cartItemCount > 0 && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      className="absolute -right-1 -top-1"
+                    >
+                      <Badge 
+                        variant="destructive" 
+                        className="h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+                        data-testid="badge-cart-count"
+                      >
+                        <motion.span
+                          key={cartItemCount}
+                          initial={{ scale: 1.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {cartItemCount}
+                        </motion.span>
+                      </Badge>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </Button>
+            </motion.div>
 
             <Sheet>
               <SheetTrigger asChild>

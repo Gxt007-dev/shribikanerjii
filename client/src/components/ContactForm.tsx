@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, Clock } from "lucide-react";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 interface ContactFormProps {
   onSubmit?: (data: { name: string; email: string; subject: string; message: string }) => void;
@@ -26,17 +27,27 @@ export default function ContactForm({ onSubmit }: ContactFormProps) {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
           <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4" data-testid="text-contact-title">
             Get in Touch
           </h1>
           <p className="text-lg text-muted-foreground" data-testid="text-contact-subtitle">
             Have questions? We'd love to hear from you.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-5 gap-8">
-          <div className="md:col-span-3">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="md:col-span-3"
+          >
             <Card>
               <CardHeader>
                 <CardTitle>Send us a message</CardTitle>
@@ -98,9 +109,14 @@ export default function ContactForm({ onSubmit }: ContactFormProps) {
                 </form>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
 
-          <div className="md:col-span-2 space-y-6">
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="md:col-span-2 space-y-6"
+          >
             <Card>
               <CardHeader>
                 <CardTitle>Contact Information</CardTitle>
@@ -138,7 +154,7 @@ export default function ContactForm({ onSubmit }: ContactFormProps) {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
