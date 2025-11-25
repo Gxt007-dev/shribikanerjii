@@ -20,22 +20,16 @@ export default function Header({ cartItemCount = 0, onCartClick }: HeaderProps) 
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
           <div className="flex items-center gap-8">
-            <Link href="/">
-              <a className="flex items-center gap-2" data-testid="link-home">
-                <span className="font-serif text-2xl font-bold text-primary">Shri Bikanerji</span>
-              </a>
+            <Link href="/" className="flex items-center gap-2" data-testid="link-home">
+              <span className="font-serif text-2xl font-bold text-primary">Shri Bikanerji</span>
             </Link>
             
             <nav className="hidden md:flex items-center gap-6">
-              <Link href="/">
-                <a className="text-sm font-medium hover-elevate active-elevate-2 px-3 py-2 rounded-md" data-testid="link-shop">
-                  Shop
-                </a>
+              <Link href="/" className="text-sm font-medium hover-elevate active-elevate-2 px-3 py-2 rounded-md" data-testid="link-shop">
+                Shop
               </Link>
-              <Link href="/contact">
-                <a className="text-sm font-medium hover-elevate active-elevate-2 px-3 py-2 rounded-md" data-testid="link-contact">
-                  Contact
-                </a>
+              <Link href="/contact" className="text-sm font-medium hover-elevate active-elevate-2 px-3 py-2 rounded-md" data-testid="link-contact">
+                Contact
               </Link>
             </nav>
           </div>
@@ -108,15 +102,11 @@ export default function Header({ cartItemCount = 0, onCartClick }: HeaderProps) 
               </SheetTrigger>
               <SheetContent>
                 <nav className="flex flex-col gap-4 mt-8">
-                  <Link href="/">
-                    <a className="text-lg font-medium hover-elevate active-elevate-2 px-3 py-2 rounded-md" data-testid="link-mobile-shop">
-                      Shop
-                    </a>
+                  <Link href="/" className="text-lg font-medium hover-elevate active-elevate-2 px-3 py-2 rounded-md" data-testid="link-mobile-shop">
+                    Shop
                   </Link>
-                  <Link href="/contact">
-                    <a className="text-lg font-medium hover-elevate active-elevate-2 px-3 py-2 rounded-md" data-testid="link-mobile-contact">
-                      Contact
-                    </a>
+                  <Link href="/contact" className="text-lg font-medium hover-elevate active-elevate-2 px-3 py-2 rounded-md" data-testid="link-mobile-contact">
+                    Contact
                   </Link>
                 </nav>
               </SheetContent>
