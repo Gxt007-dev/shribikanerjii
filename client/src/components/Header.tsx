@@ -21,7 +21,7 @@ export default function Header({ cartItemCount = 0, onCartClick }: HeaderProps) 
           <div className="flex items-center gap-8">
             <Link href="/">
               <a className="flex items-center gap-2" data-testid="link-home">
-                <span className="font-serif text-2xl font-bold text-primary">SweetShop</span>
+                <span className="font-serif text-2xl font-bold text-primary">Shri Bikanerji</span>
               </a>
             </Link>
             

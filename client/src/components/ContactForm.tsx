@@ -111,7 +111,7 @@ export default function ContactForm({ onSubmit }: ContactFormProps) {
                   <div>
                     <p className="font-medium">Email</p>
                     <p className="text-sm text-muted-foreground" data-testid="text-email">
-                      hello@sweetshop.com
+                      hello@shribikanerji.com
                     </p>
                   </div>
                 </div>

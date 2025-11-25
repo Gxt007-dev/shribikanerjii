@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import heroImage from "@assets/generated_images/colorful_assorted_sweets_hero.png";
+import heroImage from "@assets/generated_images/indian_sweets_assorted_display.png";
 
 interface HeroProps {
   onShopNowClick?: () => void;
@@ -17,10 +17,10 @@ export default function Hero({ onShopNowClick }: HeroProps) {
       <div className="relative h-full container mx-auto px-4 flex items-center justify-center">
         <div className="text-center text-white max-w-3xl">
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold mb-6" data-testid="text-hero-title">
-            Premium Handcrafted Sweets
+            Authentic Indian Sweets
           </h1>
           <p className="text-lg md:text-xl mb-8 text-white/90" data-testid="text-hero-subtitle">
-            Indulge in our artisanal collection of chocolates, gummies, and confections
+            Traditional mithai made with finest ingredients and time-honored recipes
           </p>
           <Button 
             size="lg" 
@@ -34,15 +34,15 @@ export default function Hero({ onShopNowClick }: HeroProps) {
           <div className="flex flex-wrap items-center justify-center gap-6 mt-12 text-sm text-white/80">
             <div className="flex items-center gap-2" data-testid="text-free-shipping">
               <span>🚚</span>
-              <span>Free Shipping Over $50</span>
+              <span>Free Delivery Over ₹500</span>
             </div>
             <div className="flex items-center gap-2" data-testid="text-natural-ingredients">
               <span>🌿</span>
-              <span>100% Natural Ingredients</span>
+              <span>100% Pure Ingredients</span>
             </div>
             <div className="flex items-center gap-2" data-testid="text-handcrafted">
               <span>✨</span>
-              <span>Handcrafted Daily</span>
+              <span>Traditional Recipes</span>
             </div>
           </div>
         </div>

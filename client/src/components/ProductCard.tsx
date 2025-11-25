@@ -46,7 +46,7 @@ export default function ProductCard({
             {name}
           </h3>
           <p className="text-2xl font-bold text-primary" data-testid={`text-price-${id}`}>
-            ${price}
+            ₹{price}
           </p>
         </div>
         <Button 
