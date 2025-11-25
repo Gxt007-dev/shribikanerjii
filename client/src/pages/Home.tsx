@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useLocation } from "wouter";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
@@ -39,6 +40,7 @@ const CATEGORIES = [
 ];
 
 export default function Home() {
+  const [, navigate] = useLocation();
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { toast } = useToast();
@@ -175,11 +177,9 @@ export default function Home() {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onCheckout={() => {
+          sessionStorage.setItem("checkoutCart", JSON.stringify(cartItems));
           setCartOpen(false);
-          toast({
-            title: "Checkout",
-            description: "Checkout functionality will be implemented soon!",
-          });
+          navigate("/checkout");
         }}
       />
     </div>
