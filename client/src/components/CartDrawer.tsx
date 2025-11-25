@@ -77,7 +77,7 @@ export default function CartDrawer({
                       </Button>
                     </div>
                     <p className="text-sm font-semibold" data-testid={`text-cart-item-price-${item.id}`}>
-                      ${item.price.toFixed(2)}
+                      ₹{item.price.toFixed(0)}
                     </p>
                     <div className="flex items-center gap-2">
                       <Button
@@ -114,11 +114,11 @@ export default function CartDrawer({
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span>Subtotal</span>
-              <span data-testid="text-subtotal">${subtotal.toFixed(2)}</span>
+              <span data-testid="text-subtotal">₹{subtotal.toFixed(0)}</span>
             </div>
             <div className="flex justify-between font-semibold text-lg">
               <span>Total</span>
-              <span className="text-primary" data-testid="text-total">${subtotal.toFixed(2)}</span>
+              <span className="text-primary" data-testid="text-total">₹{subtotal.toFixed(0)}</span>
             </div>
           </div>
           <div className="space-y-2">

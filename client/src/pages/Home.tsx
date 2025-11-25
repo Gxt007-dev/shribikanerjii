@@ -8,30 +8,32 @@ import CartDrawer, { CartItem } from "@/components/CartDrawer";
 import AdSense from "@/components/AdSense";
 import { useToast } from "@/hooks/use-toast";
 
-import chocolateImage from "@assets/generated_images/chocolate_truffle_product_photo.png";
-import gummyImage from "@assets/generated_images/gummy_bears_product_photo.png";
-import giftBoxImage from "@assets/generated_images/chocolate_gift_box_photo.png";
-import candyImage from "@assets/generated_images/hard_candies_product_photo.png";
-import chocolateCategoryImage from "@assets/generated_images/chocolate_category_showcase.png";
-import gummyCategoryImage from "@assets/generated_images/gummies_category_showcase.png";
-import giftBoxCategoryImage from "@assets/generated_images/gift_boxes_category_showcase.png";
+import gulabJamunImage from "@assets/generated_images/gulab_jamun_product_photo.png";
+import kajuKatliImage from "@assets/generated_images/kaju_katli_product_photo.png";
+import barfiImage from "@assets/generated_images/barfi_assortment_product_photo.png";
+import jalebiImage from "@assets/generated_images/jalebi_product_photo.png";
+import rasgullaImage from "@assets/generated_images/rasgulla_product_photo.png";
+import giftBoxImage from "@assets/generated_images/indian_sweet_gift_box.png";
+import barfiCategoryImage from "@assets/generated_images/barfi_category_showcase.png";
+import friedSweetsCategoryImage from "@assets/generated_images/fried_sweets_category_showcase.png";
+import giftBoxCategoryImage from "@assets/generated_images/indian_sweet_gift_box.png";
 
 //todo: remove mock functionality
 const MOCK_PRODUCTS = [
-  { id: '1', name: 'Dark Chocolate Truffle', price: '12.99', category: 'Chocolates', image: chocolateImage },
-  { id: '2', name: 'Gummy Bears Mix', price: '8.99', category: 'Gummies', image: gummyImage },
-  { id: '3', name: 'Premium Gift Box', price: '29.99', category: 'Gift Boxes', image: giftBoxImage },
-  { id: '4', name: 'Assorted Hard Candies', price: '6.99', category: 'Candies', image: candyImage },
-  { id: '5', name: 'Milk Chocolate Bar', price: '5.99', category: 'Chocolates', image: chocolateImage },
-  { id: '6', name: 'Sour Gummy Worms', price: '7.99', category: 'Gummies', image: gummyImage },
-  { id: '7', name: 'Deluxe Chocolate Box', price: '49.99', category: 'Gift Boxes', image: giftBoxImage },
-  { id: '8', name: 'Fruit Lollipops', price: '4.99', category: 'Candies', image: candyImage },
+  { id: '1', name: 'Gulab Jamun', price: '299', category: 'Fried Sweets', image: gulabJamunImage },
+  { id: '2', name: 'Kaju Katli', price: '599', category: 'Barfi', image: kajuKatliImage },
+  { id: '3', name: 'Mithai Gift Box', price: '999', category: 'Gift Boxes', image: giftBoxImage },
+  { id: '4', name: 'Assorted Barfi', price: '399', category: 'Barfi', image: barfiImage },
+  { id: '5', name: 'Jalebi', price: '249', category: 'Fried Sweets', image: jalebiImage },
+  { id: '6', name: 'Rasgulla', price: '199', category: 'Milk Sweets', image: rasgullaImage },
+  { id: '7', name: 'Premium Mithai Box', price: '1499', category: 'Gift Boxes', image: giftBoxImage },
+  { id: '8', name: 'Mixed Barfi', price: '449', category: 'Barfi', image: barfiImage },
 ];
 
 //todo: remove mock functionality
 const CATEGORIES = [
-  { name: 'Chocolates', image: chocolateCategoryImage },
-  { name: 'Gummies', image: gummyCategoryImage },
+  { name: 'Barfi', image: barfiCategoryImage },
+  { name: 'Fried Sweets', image: friedSweetsCategoryImage },
   { name: 'Gift Boxes', image: giftBoxCategoryImage },
 ];
 

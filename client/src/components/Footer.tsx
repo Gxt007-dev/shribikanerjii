@@ -8,10 +8,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="font-serif text-2xl font-bold text-primary mb-4">
-              SweetShop
+              Shri Bikanerji
             </h3>
             <p className="text-sm text-muted-foreground">
-              Premium handcrafted sweets made with love and the finest ingredients.
+              Authentic Indian sweets made with traditional recipes and the finest ingredients.
             </p>
           </div>
 
@@ -19,23 +19,23 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Shop</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/?category=chocolates">
-                  <a className="text-muted-foreground hover:text-foreground" data-testid="link-chocolates">
-                    Chocolates
+                <Link href="/?category=barfi">
+                  <a className="text-muted-foreground hover:text-foreground" data-testid="link-barfi">
+                    Barfi
                   </a>
                 </Link>
               </li>
               <li>
-                <Link href="/?category=gummies">
-                  <a className="text-muted-foreground hover:text-foreground" data-testid="link-gummies">
-                    Gummies
+                <Link href="/?category=fried-sweets">
+                  <a className="text-muted-foreground hover:text-foreground" data-testid="link-fried-sweets">
+                    Fried Sweets
                   </a>
                 </Link>
               </li>
               <li>
-                <Link href="/?category=candies">
-                  <a className="text-muted-foreground hover:text-foreground" data-testid="link-candies">
-                    Candies
+                <Link href="/?category=milk-sweets">
+                  <a className="text-muted-foreground hover:text-foreground" data-testid="link-milk-sweets">
+                    Milk Sweets
                   </a>
                 </Link>
               </li>
@@ -106,7 +106,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
-          <p data-testid="text-copyright">&copy; 2025 SweetShop. All rights reserved.</p>
+          <p data-testid="text-copyright">&copy; 2025 Shri Bikanerji. All rights reserved.</p>
         </div>
       </div>
     </footer>
