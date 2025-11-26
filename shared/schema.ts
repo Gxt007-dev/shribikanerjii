@@ -1,7 +1,15 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, numeric } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, numeric, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").unique().notNull(),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
 
 export const products = pgTable("products", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -28,11 +36,13 @@ export const orders = pgTable("orders", {
   items: text("items").notNull(),
   total: numeric("total", { precision: 10, scale: 2 }).notNull(),
   status: text("status").notNull().default("pending"),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
 });
 
 export const insertOrderSchema = createInsertSchema(orders).omit({
   id: true,
   status: true,
+  stripePaymentIntentId: true,
 });
 
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
