@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -9,6 +9,7 @@ import CartDrawer, { CartItem } from "@/components/CartDrawer";
 import AdSense from "@/components/AdSense";
 import { useToast } from "@/hooks/use-toast";
 import { motion, useInView } from "framer-motion";
+import { updateSEO, pageSEO } from "@/lib/seo";
 
 import gulabJamunImage from "@assets/generated_images/gulab_jamun_product_photo.png";
 import kajuKatliImage from "@assets/generated_images/kaju_katli_product_photo.png";
@@ -49,6 +50,10 @@ export default function Home() {
   const productsRef = useRef(null);
   const categoriesInView = useInView(categoriesRef, { once: true, amount: 0.2 });
   const productsInView = useInView(productsRef, { once: true, amount: 0.1 });
+
+  useEffect(() => {
+    updateSEO(pageSEO.home);
+  }, []);
 
   const handleAddToCart = (productId: string) => {
     const product = MOCK_PRODUCTS.find(p => p.id === productId);
