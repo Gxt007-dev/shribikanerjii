@@ -1,5 +1,5 @@
 import { useLocation } from "wouter";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { updateSEO, pageSEO } from "@/lib/seo";
 
 interface CartItem {
   id: string;
@@ -29,6 +30,10 @@ export default function Checkout() {
 
   const cartItems: CartItem[] = JSON.parse(sessionStorage.getItem("checkoutCart") || "[]");
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  useEffect(() => {
+    updateSEO(pageSEO.checkout);
+  }, []);
 
   if (cartItems.length === 0) {
     return (

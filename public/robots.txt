@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+# Crawl delay to avoid overloading server
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://shribikanerjii.com/sitemap.xml
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Bing specific
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
